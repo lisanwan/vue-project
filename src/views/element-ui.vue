@@ -41,6 +41,7 @@ export default {
       this.$message.success(this.name)
     },
     async login() {
+      this.$message.success('发出请求了')
       await login(this.loginForm)
     }
   },
