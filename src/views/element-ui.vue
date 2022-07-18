@@ -1,59 +1,65 @@
 <template>
-  <div>
-    <el-upload
-      class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-preview="handlePreview"
-      :on-remove="handleRemove"
-      :before-remove="beforeRemove"
-      multiple
-      :limit="3"
-      :on-exceed="handleExceed"
-      :file-list="fileList"
-    >
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">
-        只能上传jpg/png文件，且不超过500kb
-      </div>
-    </el-upload>
+  <div class="btns">
+    <el-row>
+      <el-button>默认按钮</el-button>
+      <el-button type="primary" v-if="showChina" @click="goChina"
+        >中国地图</el-button
+      >
+      <el-button type="danger" v-if="!showChina" @click="goChina"
+        >返回首页</el-button
+      >
+      <el-button type="success" @click="outName">store</el-button>
+      <el-button type="info" @click="login">登录功能</el-button>
+      <el-button type="warning">警告按钮</el-button>
+    </el-row>
+    <router-view />
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+import { login } from '../api/app'
 export default {
   data() {
     return {
-      fileList: [
-        {
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-        {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }
-      ]
+      showChina: true,
+      loginForm: {
+        mobile: '13800000002',
+        password: '123456'
+      }
     }
   },
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
+    goChina() {
+      if (this.showChina) {
+        this.$router.push('/echarts')
+      } else {
+        this.$router.push('/')
+      }
+      this.showChina = !this.showChina
     },
-    handlePreview(file) {
-      console.log(file)
+    outName() {
+      this.$message.success(this.name)
     },
-    handleExceed(files, fileList) {
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-          files.length + fileList.length
-        } 个文件`
-      )
+    async login() {
+      await login(this.loginForm)
     }
+  },
+  created() {
+    if (this.$route.path === '/echarts') {
+      this.showChina = false
+    }
+  },
+  computed: {
+    // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters(['name'])
   }
 }
 </script>
 
 <style lang="less" scoped>
-.a {
-  color: red;
+.el-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
 }
 </style>

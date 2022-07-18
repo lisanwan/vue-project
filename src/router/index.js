@@ -7,8 +7,18 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/element-ui.vue')
+    component: () => import('../views/element-ui.vue'),
+    children: [
+      {
+        path: '/echarts',
+        component: () => import('../views/echarts.vue')
+      }
+    ]
   }
+  // {
+  //   path: '/echarts',
+  //       component: () => import('../views/echarts.vue')
+  // }
 ]
 
 const router = new VueRouter({
