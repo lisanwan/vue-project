@@ -42,7 +42,8 @@ export default {
     },
     async login() {
       this.$message.success('发出请求了')
-      await login(this.loginForm)
+      const res = await login(this.loginForm)
+      console.log(res)
     }
   },
   created() {
